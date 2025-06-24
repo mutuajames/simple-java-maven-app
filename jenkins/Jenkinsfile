@@ -9,6 +9,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo "Executing for branch $BRANCH_NAME"
                 sh 'mvn -B -DskipTests clean package'
             }
         }
@@ -23,6 +24,11 @@ pipeline {
             }
         }
         stage('Deliver') { 
+            when {
+                expression {
+                    BRANCH_NAME = "master"
+                }
+            }
             steps {
                 sh './jenkins/scripts/deliver.sh' 
             }
